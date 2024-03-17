@@ -13,7 +13,7 @@ class VillageController extends Controller
      */
     public function index()
     {
-        //
+        return view("pages.villages.index");
     }
 
     /**
@@ -21,7 +21,7 @@ class VillageController extends Controller
      */
     public function create()
     {
-        //
+        return view("pages.villages.create");
     }
 
     /**

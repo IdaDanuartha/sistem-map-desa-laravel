@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('villages', function (Blueprint $table) {
             $table->id();
+            $table->string("name");
+            $table->string("path")->nullable();
+            $table->text("description")->nullable();
+            $table->float("latitude", 5);
+            $table->float("longitude", 5);
             $table->timestamps();
         });
     }

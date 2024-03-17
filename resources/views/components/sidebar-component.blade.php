@@ -30,7 +30,7 @@
             </li>   
             
             <li class="w-full">
-                <a href="{{ route('villages.index') }}" class="side-link {{ Request::is('/villages*') ? 'active' : '' }}">
+                <a href="{{ route('villages.index') }}" class="side-link {{ Request::is('villages*') ? 'active' : '' }}">
                     <span class="icon-sidebar-wrapper">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
                              fill="none">
@@ -44,7 +44,7 @@
             </li> 
 
             <li class="w-full">
-                <a href="{{ route('infrastructures.index') }}" class="side-link {{ Request::is('/infrastructures*') ? 'active' : '' }}">
+                <a href="{{ route('infrastructures.index') }}" class="side-link {{ Request::is('infrastructures*') ? 'active' : '' }}">
                     <span class="icon-sidebar-wrapper">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
                              fill="none">
@@ -58,7 +58,7 @@
             </li> 
 
             <li class="w-full">
-                <a href="{{ route('facilities.index') }}" class="side-link {{ Request::is('/facilities*') ? 'active' : '' }}">
+                <a href="{{ route('facilities.index') }}" class="side-link {{ Request::is('facilities*') ? 'active' : '' }}">
                     <span class="icon-sidebar-wrapper">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
                              fill="none">
