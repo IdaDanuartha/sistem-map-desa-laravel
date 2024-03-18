@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,11 +14,15 @@ return new class extends Migration
     {
         Schema::create('facilities', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(User::class)
+				->nullable()
+				->cascadeOnUpdate()
+				->nullOnDelete();
             $table->string("name");
             $table->string("path")->nullable();
             $table->text("description")->nullable();
-            $table->float("latitude", 5);
-            $table->float("longitude", 5);
+            $table->string("latitude");
+            $table->string("longitude");
             $table->timestamps();
         });
     }

@@ -35,7 +35,8 @@ class VillageRepository
   public function store($request): Village|Exception
   {
     DB::beginTransaction();
-    try {         
+    try {    
+        $request["user_id"] = auth()->id();      
         if (Arr::has($request, 'path')) {
             $image = Arr::get($request, 'path');
             $path = $this->file->uploadSingleFile($image, "villages");

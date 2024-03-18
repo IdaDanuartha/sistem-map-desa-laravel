@@ -10,6 +10,10 @@
 		@apply grid grid-cols-12 gap-6 items-center
 	}
 
+	.form-label.required::after {
+		content: '*';
+		@apply text-red-500 text-xl relative top-1 left-0.5;
+	}
 
 	.section {
 		@apply container mx-auto

@@ -79,9 +79,9 @@ class VillageController extends Controller
         try {
             $this->village->delete($village);
 
-            return redirect()->route('villages.index')->with('success', $this->responseMessage->response("Village", true, 'delete'));
+            return redirect()->route('villages.index')->with('success', $this->responseMessage->response("Location", true, 'delete'));
         } catch (\Exception $e) {            
-            return redirect()->route('villages.index')->with('error', $this->responseMessage->response("village", false, 'delete'));
+            return redirect()->route('villages.index')->with('error', $this->responseMessage->response("location", false, 'delete'));
         }
     }
 }
