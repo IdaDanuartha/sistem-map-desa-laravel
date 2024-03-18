@@ -4,63 +4,84 @@ namespace App\Http\Controllers;
 
 use App\Models\Infrastructure;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Infrastructure\StoreInfrastructureRequest;
+use App\Http\Requests\Infrastructure\UpdateInfrastructureRequest;
+use App\Repositories\InfrastructureRepository;
+use App\Utils\ResponseMessage;
+use Exception;
 use Illuminate\Http\Request;
 
 class InfrastructureController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function __construct(
+        protected readonly InfrastructureRepository $infrastructure,
+        protected readonly ResponseMessage $responseMessage
+    ) {}
+
+    public function index(Request $request)
+    {                                   
+        $infrastructures = $this->infrastructure->findAll();
+        return view('pages.infrastructures.index', compact("infrastructures"));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
-    {
-        //
+    {                                           
+        return view('pages.infrastructures.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Infrastructure $infrastructure)
-    {
-        //
+    {                                    
+        return view('pages.infrastructures.detail', compact("infrastructure"));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    public function showJson(Infrastructure $infrastructure)
+    {                                    
+        return response()->json([
+            "infrastructure" => $this->infrastructure->findById($infrastructure)
+        ]);
+    }
+
     public function edit(Infrastructure $infrastructure)
-    {
-        //
+    {                                           
+        return view('pages.infrastructures.edit', compact("infrastructure"));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Infrastructure $infrastructure)
-    {
-        //
+    public function store(StoreInfrastructureRequest $request)
+    {        
+        try {
+            $store = $this->infrastructure->store($request->validated());
+
+            if($store instanceof Infrastructure) return redirect(route("infrastructures.index"))
+                                ->with("success", $this->responseMessage->response("Location"));
+            throw new Exception($this->responseMessage->response("Location", false));
+        } catch (\Exception $e) {  
+            logger($e->getMessage());
+
+            return redirect(route("infrastructures.create"))->with("error", $this->responseMessage->response("location", false));
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function update(UpdateInfrastructureRequest $request, Infrastructure $infrastructure)
+    {
+        try {                     
+            $update = $this->infrastructure->update($request->validated(), $infrastructure);
+
+            if($update) return redirect(route('infrastructures.index'))
+                                ->with('success', $this->responseMessage->response("Location", true, 'update'));
+            throw new Exception($this->responseMessage->response("location", false, 'update'));
+        } catch (\Exception $e) {
+            return redirect()->route('infrastructures.edit', $infrastructure->id)->with('error', $this->responseMessage->response("location", false, 'update'));
+        }
+    }
+
     public function destroy(Infrastructure $infrastructure)
     {
-        //
+        try {
+            $this->infrastructure->delete($infrastructure);
+
+            return redirect()->route('infrastructures.index')->with('success', $this->responseMessage->response("Location", true, 'delete'));
+        } catch (\Exception $e) {            
+            return redirect()->route('infrastructures.index')->with('error', $this->responseMessage->response("location", false, 'delete'));
+        }
     }
 }

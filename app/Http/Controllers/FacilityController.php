@@ -4,63 +4,84 @@ namespace App\Http\Controllers;
 
 use App\Models\Facility;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Facility\StoreFacilityRequest;
+use App\Http\Requests\Facility\UpdateFacilityRequest;
+use App\Repositories\FacilityRepository;
+use App\Utils\ResponseMessage;
+use Exception;
 use Illuminate\Http\Request;
 
 class FacilityController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function __construct(
+        protected readonly FacilityRepository $facility,
+        protected readonly ResponseMessage $responseMessage
+    ) {}
+
+    public function index(Request $request)
+    {                                   
+        $facilities = $this->facility->findAll();
+        return view('pages.facilities.index', compact("facilities"));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
-    {
-        //
+    {                                           
+        return view('pages.facilities.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Facility $facility)
-    {
-        //
+    {                                    
+        return view('pages.facilities.detail', compact("facility"));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    public function showJson(Facility $facility)
+    {                                    
+        return response()->json([
+            "facility" => $this->facility->findById($facility)
+        ]);
+    }
+
     public function edit(Facility $facility)
-    {
-        //
+    {                                           
+        return view('pages.facilities.edit', compact("facility"));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Facility $facility)
-    {
-        //
+    public function store(StoreFacilityRequest $request)
+    {        
+        try {
+            $store = $this->facility->store($request->validated());
+
+            if($store instanceof Facility) return redirect(route("facilities.index"))
+                                ->with("success", $this->responseMessage->response("Location"));
+            throw new Exception($this->responseMessage->response("Location", false));
+        } catch (\Exception $e) {  
+            logger($e->getMessage());
+
+            return redirect(route("facilities.create"))->with("error", $this->responseMessage->response("location", false));
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function update(UpdateFacilityRequest $request, Facility $facility)
+    {
+        try {                     
+            $update = $this->facility->update($request->validated(), $facility);
+
+            if($update) return redirect(route('facilities.index'))
+                                ->with('success', $this->responseMessage->response("Location", true, 'update'));
+            throw new Exception($this->responseMessage->response("location", false, 'update'));
+        } catch (\Exception $e) {
+            return redirect()->route('facilities.edit', $facility->id)->with('error', $this->responseMessage->response("location", false, 'update'));
+        }
+    }
+
     public function destroy(Facility $facility)
     {
-        //
+        try {
+            $this->facility->delete($facility);
+
+            return redirect()->route('facilities.index')->with('success', $this->responseMessage->response("Location", true, 'delete'));
+        } catch (\Exception $e) {            
+            return redirect()->route('facilities.index')->with('error', $this->responseMessage->response("location", false, 'delete'));
+        }
     }
 }
