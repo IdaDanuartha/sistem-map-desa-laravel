@@ -24,7 +24,7 @@ class LoginController extends Controller
             $login = $this->authRepository->login($request->validated());
 
             if($login) {
-                return redirect()->route("dashboard.index");  
+                return redirect()->route("dashboard");  
             } else {
                 throw new Exception();
             }

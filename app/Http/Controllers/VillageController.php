@@ -4,63 +4,84 @@ namespace App\Http\Controllers;
 
 use App\Models\Village;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Village\StoreVillageRequest;
+use App\Http\Requests\Village\UpdateVillageRequest;
+use App\Repositories\VillageRepository;
+use App\Utils\ResponseMessage;
+use Exception;
 use Illuminate\Http\Request;
 
 class VillageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return view("pages.villages.index");
+    public function __construct(
+        protected readonly VillageRepository $village,
+        protected readonly ResponseMessage $responseMessage
+    ) {}
+
+    public function index(Request $request)
+    {                                   
+        $villages = $this->village->findAll();
+        return view('pages.villages.index', compact("villages"));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
-    {
-        return view("pages.villages.create");
+    {                                           
+        return view('pages.villages.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Village $village)
-    {
-        //
+    {                                    
+        return view('pages.villages.detail', compact("village"));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    public function showJson(Village $village)
+    {                                    
+        return response()->json([
+            "village" => $this->village->findById($village)
+        ]);
+    }
+
     public function edit(Village $village)
-    {
-        //
+    {                                           
+        return view('pages.villages.edit', compact("village"));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Village $village)
-    {
-        //
+    public function store(StoreVillageRequest $request)
+    {        
+        try {
+            $store = $this->village->store($request->validated());
+
+            if($store instanceof Village) return redirect(route("villages.index"))
+                                ->with("success", $this->responseMessage->response("Location"));
+            throw new Exception($this->responseMessage->response("Location", false));
+        } catch (\Exception $e) {  
+            logger($e->getMessage());
+
+            return redirect(route("villages.create"))->with("error", $this->responseMessage->response("location", false));
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function update(UpdateVillageRequest $request, Village $village)
+    {
+        try {                     
+            $update = $this->village->update($request->validated(), $village);
+
+            if($update) return redirect(route('villages.index'))
+                                ->with('success', $this->responseMessage->response("Location", true, 'update'));
+            throw new Exception($this->responseMessage->response("location", false, 'update'));
+        } catch (\Exception $e) {
+            return redirect()->route('villages.edit', $village->id)->with('error', $this->responseMessage->response("location", false, 'update'));
+        }
+    }
+
     public function destroy(Village $village)
     {
-        //
+        try {
+            $this->village->delete($village);
+
+            return redirect()->route('villages.index')->with('success', $this->responseMessage->response("Village", true, 'delete'));
+        } catch (\Exception $e) {            
+            return redirect()->route('villages.index')->with('error', $this->responseMessage->response("village", false, 'delete'));
+        }
     }
 }

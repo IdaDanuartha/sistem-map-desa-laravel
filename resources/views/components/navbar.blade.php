@@ -15,7 +15,7 @@
                             <img src="{{ asset('assets/img/avatars/1.png') }}" alt class="w-px-40 h-auto rounded-circle" />
                         </div>
                         <span class="d-xl-flex d-none">
-                            <span class="font-medium text-second block">{{ auth()->user->username }}</span>
+                            <span class="font-medium text-second block">{{ auth()->user()->username }}</span>
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
@@ -29,7 +29,7 @@
                                         </div>
                                     </div>
                                     <div class="flex-grow-1">
-                                        <span class="font-medium text-second block">{{ auth()->user->username }}</span>
+                                        <span class="font-medium text-second block">{{ auth()->user()->username }}</span>
                                         <small class="text-sm text-desc">
                                             admin
                                         </small>
