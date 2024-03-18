@@ -52,12 +52,12 @@ class FacilityController extends Controller
             $store = $this->facility->store($request->validated());
 
             if($store instanceof Facility) return redirect(route("facilities.index"))
-                                ->with("success", $this->responseMessage->response("Location"));
-            throw new Exception($this->responseMessage->response("Location", false));
+                                ->with("success", $this->responseMessage->response("Lokasi"));
+            throw new Exception($this->responseMessage->response("Lokasi", false));
         } catch (\Exception $e) {  
             logger($e->getMessage());
 
-            return redirect(route("facilities.create"))->with("error", $this->responseMessage->response("location", false));
+            return redirect(route("facilities.create"))->with("error", $this->responseMessage->response("lokasi", false));
         }
     }
 
@@ -67,10 +67,10 @@ class FacilityController extends Controller
             $update = $this->facility->update($request->validated(), $facility);
 
             if($update) return redirect(route('facilities.index'))
-                                ->with('success', $this->responseMessage->response("Location", true, 'update'));
-            throw new Exception($this->responseMessage->response("location", false, 'update'));
+                                ->with('success', $this->responseMessage->response("Lokasi", true, 'update'));
+            throw new Exception($this->responseMessage->response("lokasi", false, 'update'));
         } catch (\Exception $e) {
-            return redirect()->route('facilities.edit', $facility->id)->with('error', $this->responseMessage->response("location", false, 'update'));
+            return redirect()->route('facilities.edit', $facility->id)->with('error', $this->responseMessage->response("lokasi", false, 'update'));
         }
     }
 
@@ -79,9 +79,9 @@ class FacilityController extends Controller
         try {
             $this->facility->delete($facility);
 
-            return redirect()->route('facilities.index')->with('success', $this->responseMessage->response("Location", true, 'delete'));
+            return redirect()->route('facilities.index')->with('success', $this->responseMessage->response("Lokasi", true, 'delete'));
         } catch (\Exception $e) {            
-            return redirect()->route('facilities.index')->with('error', $this->responseMessage->response("location", false, 'delete'));
+            return redirect()->route('facilities.index')->with('error', $this->responseMessage->response("lokasi", false, 'delete'));
         }
     }
 }

@@ -52,12 +52,12 @@ class InfrastructureController extends Controller
             $store = $this->infrastructure->store($request->validated());
 
             if($store instanceof Infrastructure) return redirect(route("infrastructures.index"))
-                                ->with("success", $this->responseMessage->response("Location"));
-            throw new Exception($this->responseMessage->response("Location", false));
+                                ->with("success", $this->responseMessage->response("Lokasi"));
+            throw new Exception($this->responseMessage->response("Lokasi", false));
         } catch (\Exception $e) {  
             logger($e->getMessage());
 
-            return redirect(route("infrastructures.create"))->with("error", $this->responseMessage->response("location", false));
+            return redirect(route("infrastructures.create"))->with("error", $this->responseMessage->response("lokasi", false));
         }
     }
 
@@ -67,10 +67,10 @@ class InfrastructureController extends Controller
             $update = $this->infrastructure->update($request->validated(), $infrastructure);
 
             if($update) return redirect(route('infrastructures.index'))
-                                ->with('success', $this->responseMessage->response("Location", true, 'update'));
-            throw new Exception($this->responseMessage->response("location", false, 'update'));
+                                ->with('success', $this->responseMessage->response("Lokasi", true, 'update'));
+            throw new Exception($this->responseMessage->response("lokasi", false, 'update'));
         } catch (\Exception $e) {
-            return redirect()->route('infrastructures.edit', $infrastructure->id)->with('error', $this->responseMessage->response("location", false, 'update'));
+            return redirect()->route('infrastructures.edit', $infrastructure->id)->with('error', $this->responseMessage->response("lokasi", false, 'update'));
         }
     }
 
@@ -79,9 +79,9 @@ class InfrastructureController extends Controller
         try {
             $this->infrastructure->delete($infrastructure);
 
-            return redirect()->route('infrastructures.index')->with('success', $this->responseMessage->response("Location", true, 'delete'));
+            return redirect()->route('infrastructures.index')->with('success', $this->responseMessage->response("Lokasi", true, 'delete'));
         } catch (\Exception $e) {            
-            return redirect()->route('infrastructures.index')->with('error', $this->responseMessage->response("location", false, 'delete'));
+            return redirect()->route('infrastructures.index')->with('error', $this->responseMessage->response("lokasi", false, 'delete'));
         }
     }
 }

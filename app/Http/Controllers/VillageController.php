@@ -52,12 +52,12 @@ class VillageController extends Controller
             $store = $this->village->store($request->validated());
 
             if($store instanceof Village) return redirect(route("villages.index"))
-                                ->with("success", $this->responseMessage->response("Location"));
-            throw new Exception($this->responseMessage->response("Location", false));
+                                ->with("success", $this->responseMessage->response("Lokasi"));
+            throw new Exception($this->responseMessage->response("Lokasi", false));
         } catch (\Exception $e) {  
             logger($e->getMessage());
 
-            return redirect(route("villages.create"))->with("error", $this->responseMessage->response("location", false));
+            return redirect(route("villages.create"))->with("error", $this->responseMessage->response("lokasi", false));
         }
     }
 
@@ -67,10 +67,10 @@ class VillageController extends Controller
             $update = $this->village->update($request->validated(), $village);
 
             if($update) return redirect(route('villages.index'))
-                                ->with('success', $this->responseMessage->response("Location", true, 'update'));
-            throw new Exception($this->responseMessage->response("location", false, 'update'));
+                                ->with('success', $this->responseMessage->response("Lokasi", true, 'update'));
+            throw new Exception($this->responseMessage->response("lokasi", false, 'update'));
         } catch (\Exception $e) {
-            return redirect()->route('villages.edit', $village->id)->with('error', $this->responseMessage->response("location", false, 'update'));
+            return redirect()->route('villages.edit', $village->id)->with('error', $this->responseMessage->response("lokasi", false, 'update'));
         }
     }
 
@@ -79,9 +79,9 @@ class VillageController extends Controller
         try {
             $this->village->delete($village);
 
-            return redirect()->route('villages.index')->with('success', $this->responseMessage->response("Location", true, 'delete'));
+            return redirect()->route('villages.index')->with('success', $this->responseMessage->response("Lokasi", true, 'delete'));
         } catch (\Exception $e) {            
-            return redirect()->route('villages.index')->with('error', $this->responseMessage->response("location", false, 'delete'));
+            return redirect()->route('villages.index')->with('error', $this->responseMessage->response("lokasi", false, 'delete'));
         }
     }
 }

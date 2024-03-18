@@ -3,7 +3,7 @@
 @section('main')
 
     <div class="flex justify-end">
-        <button type="button" data-bs-toggle="modal" data-bs-target="#deleteVillageModal"
+        <button type="button" data-bs-toggle="modal" data-bs-target="#deleteFacilityModal"
             class="button bg-red-500 text-white">Hapus Lokasi</button>
     </div>
     <div class="table-wrapper mt-[20px] input-teacher">
@@ -11,28 +11,28 @@
             <div class="col-span-12 md:col-span-6 flex flex-col">
                 <label for="name" class="form-label">Nama Lokasi</label>
                 <input type="text" id="name" name="name" class="input-crud" readonly
-                    value="{{ $village->name }}" />
+                    value="{{ $facility->name }}" />
             </div>
             <div class="col-span-12 md:col-span-6 flex flex-col">
                 <label for="description" class="form-label">Deskripsi</label>
                 <input type="text" id="description" name="description" class="input-crud" readonly
-                    value="{{ $village->description ?? '-' }}" />
+                    value="{{ $facility->description ?? '-' }}" />
             </div>
             <div class="col-span-12 md:col-span-6 flex flex-col">
                 <label for="latitude" class="form-label">Latitude</label>
                 <input type="text" id="latitude" name="latitude" class="input-crud" readonly
-                    value="{{ $village->latitude }}" />
+                    value="{{ $facility->latitude }}" />
             </div>
             <div class="col-span-12 md:col-span-6 flex flex-col">
                 <label for="longitude" class="form-label">Longitude</label>
                 <input type="text" id="longitude" name="longitude" class="input-crud" readonly
-                    value="{{ $village->longitude }}" />
+                    value="{{ $facility->longitude }}" />
             </div>
             <div class="col-span-12 sm:col-span-4 flex flex-col">
-                <label for="path" class="text-second">Gambar Lokasi</label>
+                <label for="path" class="text-second">Gambar Sarana dan Prasarana</label>
                 <label for="path" class="d-block mb-3">
-                    @if (isset($village->path))
-                        <img src="{{ asset('uploads/villages/' . $village->path) }}" class="border" width="400"
+                    @if (isset($facility->path))
+                        <img src="{{ asset('uploads/facilities/' . $facility->path) }}" class="border" width="400"
                             alt="">
                     @else
                         <img src="{{ asset('assets/img/upload-image.jpg') }}" class="border" width="400" alt="">
@@ -40,18 +40,18 @@
                 </label>
             </div>
             <div class="col-span-12 flex items-center gap-3 mt-2">
-                <a href="{{ route('villages.edit', $village->id) }}" class="button btn-main text-white">Edit Lokasi</a>
-                <a href="{{ route('villages.index') }}" class="button btn-second text-white">Kembali</a>
+                <a href="{{ route('facilities.edit', $facility->id) }}" class="button btn-main text-white">Edit Lokasi</a>
+                <a href="{{ route('facilities.index') }}" class="button btn-second text-white">Kembali</a>
             </div>
         </form>
     </div>
 
     {{-- Delete Village Modal --}}
-    <div class="modal fade" id="deleteVillageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="deleteFacilityModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-head" id="deleteVillageModalTitle">Hapus Data Lokasi</h5>
+                    <h5 class="modal-head" id="deleteFacilityModalTitle">Hapus Data Lokasi Sarana dan Prasarana</h5>
                     <button type="button" data-bs-dismiss="modal" aria-label="Close">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
                             fill="none">
@@ -63,12 +63,12 @@
                 </div>
                 <div class="modal-body">
                     <p>
-                        Konfirmasi Penghapusan Data Lokasi Desa: Apakah Anda yakin ingin menghapus
-                        data lokasi desa ini? Tindakan ini tidak dapat dibatalkan dan
-                        data lokasi desa akan dihapus secara permanen dari sistem.
+                        Konfirmasi Penghapusan Data Lokasi Sarana dan Prasaraan: Apakah Anda yakin ingin menghapus
+                        data lokasi sarana dan prasaraan ini? Tindakan ini tidak dapat dibatalkan dan
+                        data lokasi sarana dan prasaraan akan dihapus secara permanen dari sistem.
                     </p>
                 </div>
-                <form action="{{ route('villages.destroy', $village->id) }}" method="POST"
+                <form action="{{ route('facilities.destroy', $facility->id) }}" method="POST"
                     class="d-flex justify-content-center">
                     @csrf
                     @method('DELETE')
