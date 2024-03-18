@@ -20,10 +20,16 @@ Route::prefix('auth')->group(function() {
     
 });
 
+Route::middleware("auth")->group(function() {
+    Route::resource("/villages", VillageController::class)->except("index", "show");
+    Route::resource("/infrastructures", InfrastructureController::class)->except("index", "show");
+    Route::resource("/facilities", FacilityController::class)->except("index", "show");
+});
+
 Route::get("/", DashboardController::class)->name('dashboard');
-Route::resource("/villages", VillageController::class);
-Route::resource("/infrastructures", InfrastructureController::class);
-Route::resource("/facilities", FacilityController::class);
+Route::resource("/villages", VillageController::class)->only("index", "show");
+Route::resource("/infrastructures", InfrastructureController::class)->only("index", "show");
+Route::resource("/facilities", FacilityController::class)->only("index", "show");
 
 Route::fallback(function() {
     return view('errors.404');

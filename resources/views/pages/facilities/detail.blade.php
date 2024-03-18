@@ -2,10 +2,12 @@
 @section('title', 'Detail Lokasi')
 @section('main')
 
-    <div class="flex justify-end">
-        <button type="button" data-bs-toggle="modal" data-bs-target="#deleteFacilityModal"
-            class="button bg-red-500 text-white">Hapus Lokasi</button>
-    </div>
+    @auth
+        <div class="flex justify-end">
+            <button type="button" data-bs-toggle="modal" data-bs-target="#deleteFacilityModal"
+                class="button bg-red-500 text-white">Hapus Lokasi</button>
+        </div>
+    @endauth
     <div class="table-wrapper mt-[20px] input-teacher">
         <form class="grid grid-cols-12 gap-4">
             <div class="col-span-12 md:col-span-6 flex flex-col">
@@ -40,7 +42,9 @@
                 </label>
             </div>
             <div class="col-span-12 flex items-center gap-3 mt-2">
-                <a href="{{ route('facilities.edit', $facility->id) }}" class="button btn-main text-white">Edit Lokasi</a>
+                @auth
+                    <a href="{{ route('facilities.edit', $facility->id) }}" class="button btn-main text-white">Edit Lokasi</a>
+                @endauth
                 <a href="{{ route('facilities.index') }}" class="button btn-second text-white">Kembali</a>
             </div>
         </form>

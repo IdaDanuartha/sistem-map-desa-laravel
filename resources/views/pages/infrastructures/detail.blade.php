@@ -2,10 +2,12 @@
 @section('title', 'Detail Lokasi')
 @section('main')
 
+    @auth
     <div class="flex justify-end">
         <button type="button" data-bs-toggle="modal" data-bs-target="#deleteVillageModal"
             class="button bg-red-500 text-white">Hapus Lokasi Infrastruktur</button>
-    </div>
+    </div> 
+    @endauth
     <div class="table-wrapper mt-[20px] input-teacher">
         <form class="grid grid-cols-12 gap-4">
             <div class="col-span-12 md:col-span-6 flex flex-col">
@@ -32,15 +34,18 @@
                 <label for="path" class="text-second">Gambar Infrastruktur Desa</label>
                 <label for="path" class="d-block mb-3">
                     @if (isset($infrastructure->path))
-                        <img src="{{ asset('uploads/infrastructures/' . $infrastructure->path) }}" class="border" width="400"
-                            alt="">
+                        <img src="{{ asset('uploads/infrastructures/' . $infrastructure->path) }}" class="border"
+                            width="400" alt="">
                     @else
                         <img src="{{ asset('assets/img/upload-image.jpg') }}" class="border" width="400" alt="">
                     @endif
                 </label>
             </div>
             <div class="col-span-12 flex items-center gap-3 mt-2">
-                <a href="{{ route('infrastructures.edit', $infrastructure->id) }}" class="button btn-main text-white">Edit Infrastruktur</a>
+                @auth
+                <a href="{{ route('infrastructures.edit', $infrastructure->id) }}" class="button btn-main text-white">Edit
+                    Infrastruktur</a>
+                @endauth
                 <a href="{{ route('infrastructures.index') }}" class="button btn-second text-white">Kembali</a>
             </div>
         </form>
