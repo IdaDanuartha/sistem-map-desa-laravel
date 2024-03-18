@@ -18,7 +18,7 @@
                 </svg>
             </div>
             <p class="mt-[16px] mb-0 uppercase text-sm font-medium desc">Total Rumah Penduduk</p>
-            <h1 class="m-0 text-3xl font-semibold text-second">100</h1>
+            <h1 class="m-0 text-3xl font-semibold text-second">{{ $total_villages }}</h1>
         </div>
         <div class="card-dashboard lg:border-r border-r-0">
             <div class="icon-dashboard-wrapper">
@@ -28,7 +28,7 @@
                 </svg>
             </div>
             <p class="mt-[16px] mb-0 uppercase text-sm font-medium desc">Total Infrastruktur Desa</p>
-            <h1 class="m-0 text-3xl font-semibold text-second">100</h1>
+            <h1 class="m-0 text-3xl font-semibold text-second">{{ $total_infrastructures }}</h1>
         </div>
         <div class="card-dashboard  md:border-r border-r-0">
             <div class="icon-dashboard-wrapper">
@@ -37,7 +37,7 @@
                 </svg>
             </div>
             <p class="mt-[16px] mb-0 uppercase text-sm font-medium desc">Total Sarana dan Prasarana</p>
-            <h1 class="m-0 text-3xl font-semibold text-second">100</h1>
+            <h1 class="m-0 text-3xl font-semibold text-second">{{ $total_facilities }}</h1>
         </div>
     </div>
 </div>
