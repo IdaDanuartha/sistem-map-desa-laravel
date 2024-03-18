@@ -38,11 +38,13 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
     {{-- JQuery --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
     <!-- Select 2 -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -60,6 +62,14 @@
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    {{-- Auto Complete Js --}}
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tarekraafat-autocomplete.js/10.2.7/css/autoComplete.min.css"> --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.02.min.css">
+
 </head>
 
 <body>
@@ -149,6 +159,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
         <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
 
+        {{-- Auto Complete JS --}}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tarekraafat-autocomplete.js/10.2.7/autoComplete.min.js"></script>
 
         <script>
             const previewImg = (input_img, preview_img) => {
@@ -226,6 +238,32 @@
             $('.searchInputTable').keyup(function() {
                 oTable.search($(this).val()).draw();
             })
+
+            const showPopupMap = (data, path, show_popup = false) => {
+                const marker = L.marker([data.latitude, data.longitude]).addTo(map)
+                if(data.path) {
+                    marker
+                    .bindPopup(`
+                        <h6>${data.name}</h6>
+                        <img class="w-full mb-2" src="uploads/${path}/${data.path}" />
+                        <div class="flex justify-center">
+                            <a href="${path}/${data.id}" class="button btn-main text-white px-10 py-0.5" style="font-size: 10px;">Detail</a>    
+                        </div>
+                    `)
+
+                    if(show_popup) marker.openPopup()
+                } else {
+                    marker
+                    .bindPopup(`
+                        <h6>${data.name}</h6>
+                        <div class="flex justify-center">
+                            <a href="${path}/${data.id}" class="button btn-main text-white px-10 py-0.5" style="font-size: 10px;">Detail</a>    
+                        </div>
+                    `)
+
+                    if(show_popup) marker.openPopup()
+                }
+            }
         </script>
 
         @stack('js')

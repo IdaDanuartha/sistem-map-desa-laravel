@@ -20,7 +20,10 @@
             </a>
         </div>
     @endauth
-    <div id="map" style="width: 100%; height: 600px;"></div>
+    <div class="my-3">
+        <input type="text" id="search-box" placeholder="Cari berdasarkan nama lokasi..." class="input-crud bg-white" value="{{ request()->get("search") }}" />
+    </div>
+    <div id="map"></div>
 </div>
 @endsection
 
@@ -28,32 +31,53 @@
     <script>
         let villages = JSON.parse('<?= json_encode($villages) ?>')
 
+        $( function() {
+            let villageData = []
+            villages.forEach(village => {
+                villageData.push(village.name)
+            })
+            $( "#search-box" ).autocomplete({
+                source: villageData
+            });
+        } );
+
         // initialize the map on the "map" div with a given center and zoom
-        let map = L.map('map').setView([-8.659488860100769, 115.16421012486913], 15);
+        // const urlParams = new URLSearchParams(window.location.search);
+        // const searchQuery = urlParams.get('search');
+
+        let map = L.map('map')
+        $("#search-box").change(function() {
+            if($("#search-box" ).val() !== "") {
+                let findLocation = villages.filter(village => village.name == $("#search-box" ).val())[0]
+                console.log(findLocation)
+                map.setView([parseFloat(findLocation.latitude), parseFloat(findLocation.longitude)], 50);
+            } else {
+                map.setView([-8.659488860100769, 115.16421012486913], 15);
+            }
+        })
+        map.setView([-8.659488860100769, 115.16421012486913], 15);
+
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
+        L.Control.geocoder().addTo(map)
+
         villages.forEach(village => {
-            if(village.path) {
-                L.marker([village.latitude, village.longitude]).addTo(map)
-                .bindPopup(`
-                    <h6>${village.name}</h6>
-                    <img class="w-full mb-2" src="uploads/villages/${village.path}" />
-                    <div class="flex justify-center">
-                        <a href="villages/${village.id}" class="button btn-main text-white px-10 py-0.5" style="font-size: 10px;">Detail</a>    
-                    </div>
-                `)
-            } else {
-                L.marker([village.latitude, village.longitude]).addTo(map)
-                .bindPopup(`
-                    <h6>${village.name}</h6>
-                    <div class="flex justify-center">
-                        <a href="villages/${village.id}" class="button btn-main text-white px-10 py-0.5" style="font-size: 10px;">Detail</a>    
-                    </div>
-                `)
-            }
+            $("#search-box").change(function() {
+                if($("#search-box" ).val() !== "") {
+                    if(village.name === $("#search-box").val()) {
+                        showPopupMap(village, "villages", true)
+                    } else {
+                        showPopupMap(village, "villages")
+                    }
+                } else {
+                    showPopupMap(village, "villages")
+                }
+            })
+            showPopupMap(village, "villages")
         });
+
     </script>
 @endpush    
