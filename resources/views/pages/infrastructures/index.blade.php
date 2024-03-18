@@ -20,6 +20,9 @@
             </a>
         </div>
     @endauth
+    <div class="my-3">
+        <input type="text" id="search-box" placeholder="Cari berdasarkan nama lokasi..." class="input-crud bg-white" value="{{ request()->get("search") }}" />
+    </div>
     <div id="map"></div>
 </div>
 @endsection
@@ -28,32 +31,49 @@
     <script>
         let infrastructures = JSON.parse('<?= json_encode($infrastructures) ?>')
 
+        $( function() {
+            let infrastructureData = []
+            infrastructures.forEach(infrastructure => {
+                infrastructureData.push(infrastructure.name)
+            })
+            $( "#search-box" ).autocomplete({
+                source: infrastructureData
+            });
+        } );
+
         // initialize the map on the "map" div with a given center and zoom
-        let map = L.map('map').setView([-8.659488860100769, 115.16421012486913], 15);
+        let map = L.map('map')
+        $("#search-box").change(function() {
+            if($("#search-box" ).val() !== "") {
+                let findLocation = infrastructures.filter(infrastructure => infrastructure.name == $("#search-box" ).val())[0]
+                console.log(findLocation)
+                map.setView([parseFloat(findLocation.latitude), parseFloat(findLocation.longitude)], 50);
+            } else {
+                map.setView([-8.659488860100769, 115.16421012486913], 15);
+            }
+        })
+        map.setView([-8.659488860100769, 115.16421012486913], 15);
+
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
+        L.Control.geocoder().addTo(map)
+
         infrastructures.forEach(infrastructure => {
-            if(infrastructure.path) {
-                L.marker([infrastructure.latitude, infrastructure.longitude]).addTo(map)
-                .bindPopup(`
-                    <h6>${infrastructure.name}</h6>
-                    <img class="w-full mb-2" src="uploads/infrastructures/${infrastructure.path}" />
-                    <div class="flex justify-center">
-                        <a href="infrastructures/${infrastructure.id}" class="button btn-main text-white px-10 py-0.5" style="font-size: 10px;">Detail</a>    
-                    </div>
-                `)
-            } else {
-                L.marker([infrastructure.latitude, infrastructure.longitude]).addTo(map)
-                .bindPopup(`
-                    <h6>${infrastructure.name}</h6>
-                    <div class="flex justify-center">
-                        <a href="infrastructures/${infrastructure.id}" class="button btn-main text-white px-10 py-0.5" style="font-size: 10px;">Detail</a>    
-                    </div>
-                `)
-            }
+            $("#search-box").change(function() {
+                if($("#search-box" ).val() !== "") {
+                    if(infrastructure.name === $("#search-box").val()) {
+                        showPopupMap(infrastructure, "infrastructures", true)
+                    } else {
+                        showPopupMap(infrastructure, "infrastructures")
+                    }
+                } else {
+                    showPopupMap(infrastructure, "infrastructures")
+                }
+            })
+            showPopupMap(infrastructure, "infrastructures")
         });
     </script>
 @endpush    

@@ -42,9 +42,6 @@
         } );
 
         // initialize the map on the "map" div with a given center and zoom
-        // const urlParams = new URLSearchParams(window.location.search);
-        // const searchQuery = urlParams.get('search');
-
         let map = L.map('map')
         $("#search-box").change(function() {
             if($("#search-box" ).val() !== "") {
