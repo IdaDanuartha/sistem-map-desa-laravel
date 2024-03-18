@@ -15,6 +15,6 @@ class LogoutController extends Controller
     public function __invoke(Request $request)
     {
         $logout = $this->authRepository->logout($request);
-        if($logout) return redirect()->route('login')->withSuccess('You have logged out successfully!');        
+        if($logout) return redirect()->route('dashboard');       
     }
 }
