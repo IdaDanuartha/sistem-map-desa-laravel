@@ -66,6 +66,7 @@
                 if($("#search-box" ).val() !== "") {
                     if(infrastructure.name === $("#search-box").val()) {
                         showPopupMap(infrastructure, "infrastructures", true)
+                        $("#search-box").val("")
                     } else {
                         showPopupMap(infrastructure, "infrastructures")
                     }
