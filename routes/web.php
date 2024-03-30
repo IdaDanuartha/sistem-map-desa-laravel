@@ -22,8 +22,16 @@ Route::prefix('auth')->group(function() {
 
 Route::middleware("auth")->group(function() {
     Route::resource("/villages", VillageController::class)->except("index", "show");
+    Route::get("/village/import", [VillageController::class, 'importView'])->name('villages.importView');
+    Route::post("/village/import", [VillageController::class, 'import'])->name('villages.import');
+
     Route::resource("/infrastructures", InfrastructureController::class)->except("index", "show");
+    Route::get("/infrastructure/import", [InfrastructureController::class, 'importView'])->name('infrastructures.importView');
+    Route::post("/infrastructure/import", [InfrastructureController::class, 'import'])->name('infrastructures.import');
+
     Route::resource("/facilities", FacilityController::class)->except("index", "show");
+    Route::get("/facility/import", [FacilityController::class, 'importView'])->name('facilities.importView');
+    Route::post("/facility/import", [FacilityController::class, 'import'])->name('facilities.import');
 });
 
 Route::get("/", DashboardController::class)->name('dashboard');

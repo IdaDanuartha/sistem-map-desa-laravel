@@ -6,68 +6,90 @@ use App\Models\Village;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Village\StoreVillageRequest;
 use App\Http\Requests\Village\UpdateVillageRequest;
+use App\Imports\VillageImport;
 use App\Repositories\VillageRepository;
 use App\Utils\ResponseMessage;
 use Exception;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class VillageController extends Controller
 {
     public function __construct(
         protected readonly VillageRepository $village,
         protected readonly ResponseMessage $responseMessage
-    ) {}
+    ) {
+    }
 
     public function index(Request $request)
-    {                                   
+    {
         $villages = $this->village->findAll();
         return view('pages.villages.index', compact("villages"));
     }
 
     public function create()
-    {                                           
+    {
         return view('pages.villages.create');
     }
 
+    public function importView()
+    {
+        return view('pages.villages.import');
+    }
+
     public function show(Village $village)
-    {                                    
+    {
         return view('pages.villages.detail', compact("village"));
     }
 
     public function showJson(Village $village)
-    {                                    
+    {
         return response()->json([
             "village" => $this->village->findById($village)
         ]);
     }
 
     public function edit(Village $village)
-    {                                           
+    {
         return view('pages.villages.edit', compact("village"));
     }
 
     public function store(StoreVillageRequest $request)
-    {        
+    {
         try {
             $store = $this->village->store($request->validated());
 
-            if($store instanceof Village) return redirect(route("villages.index"))
-                                ->with("success", $this->responseMessage->response("Lokasi"));
+            if ($store instanceof Village) return redirect(route("villages.index"))
+                ->with("success", $this->responseMessage->response("Lokasi"));
             throw new Exception($this->responseMessage->response("Lokasi", false));
-        } catch (\Exception $e) {  
+        } catch (\Exception $e) {
             logger($e->getMessage());
 
             return redirect(route("villages.create"))->with("error", $this->responseMessage->response("lokasi", false));
         }
     }
 
+    public function import(Request $request)
+    {
+        try {
+            // Excel::import(new VillageImport, $request->file);
+            (new VillageImport)->import($request->file, null, \Maatwebsite\Excel\Excel::CSV);
+
+            return redirect(route("villages.index"))->with("success", $this->responseMessage->response("Lokasi"));
+        } catch (\Exception $e) {
+            logger($e->getMessage());
+
+            return redirect(route("villages.import"))->with("error", $this->responseMessage->response("lokasi", false));
+        }
+    }
+
     public function update(UpdateVillageRequest $request, Village $village)
     {
-        try {                     
+        try {
             $update = $this->village->update($request->validated(), $village);
 
-            if($update) return redirect(route('villages.index'))
-                                ->with('success', $this->responseMessage->response("Lokasi", true, 'update'));
+            if ($update) return redirect(route('villages.index'))
+                ->with('success', $this->responseMessage->response("Lokasi", true, 'update'));
             throw new Exception($this->responseMessage->response("lokasi", false, 'update'));
         } catch (\Exception $e) {
             return redirect()->route('villages.edit', $village->id)->with('error', $this->responseMessage->response("lokasi", false, 'update'));
@@ -80,7 +102,7 @@ class VillageController extends Controller
             $this->village->delete($village);
 
             return redirect()->route('villages.index')->with('success', $this->responseMessage->response("Lokasi", true, 'delete'));
-        } catch (\Exception $e) {            
+        } catch (\Exception $e) {
             return redirect()->route('villages.index')->with('error', $this->responseMessage->response("lokasi", false, 'delete'));
         }
     }

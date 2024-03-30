@@ -6,6 +6,7 @@ use App\Models\Infrastructure;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Infrastructure\StoreInfrastructureRequest;
 use App\Http\Requests\Infrastructure\UpdateInfrastructureRequest;
+use App\Imports\InfrastructureImport;
 use App\Repositories\InfrastructureRepository;
 use App\Utils\ResponseMessage;
 use Exception;
@@ -27,6 +28,11 @@ class InfrastructureController extends Controller
     public function create()
     {                                           
         return view('pages.infrastructures.create');
+    }
+
+    public function importView()
+    {                                           
+        return view('pages.infrastructures.import');
     }
 
     public function show(Infrastructure $infrastructure)
@@ -58,6 +64,20 @@ class InfrastructureController extends Controller
             logger($e->getMessage());
 
             return redirect(route("infrastructures.create"))->with("error", $this->responseMessage->response("lokasi", false));
+        }
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            // Excel::import(new VillageImport, $request->file);
+            (new InfrastructureImport)->import($request->file, null, \Maatwebsite\Excel\Excel::CSV);
+
+            return redirect(route("infrastructures.index"))->with("success", $this->responseMessage->response("Lokasi"));
+        } catch (\Exception $e) {
+            logger($e->getMessage());
+
+            return redirect(route("infrastructures.import"))->with("error", $this->responseMessage->response("lokasi", false));
         }
     }
 

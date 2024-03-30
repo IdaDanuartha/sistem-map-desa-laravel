@@ -6,6 +6,7 @@ use App\Models\Facility;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Facility\StoreFacilityRequest;
 use App\Http\Requests\Facility\UpdateFacilityRequest;
+use App\Imports\FacilityImport;
 use App\Repositories\FacilityRepository;
 use App\Utils\ResponseMessage;
 use Exception;
@@ -27,6 +28,11 @@ class FacilityController extends Controller
     public function create()
     {                                           
         return view('pages.facilities.create');
+    }
+    
+    public function importView()
+    {                                           
+        return view('pages.facilities.import');
     }
 
     public function show(Facility $facility)
@@ -58,6 +64,20 @@ class FacilityController extends Controller
             logger($e->getMessage());
 
             return redirect(route("facilities.create"))->with("error", $this->responseMessage->response("lokasi", false));
+        }
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            // Excel::import(new VillageImport, $request->file);
+            (new FacilityImport)->import($request->file, null, \Maatwebsite\Excel\Excel::CSV);
+
+            return redirect(route("facilities.index"))->with("success", $this->responseMessage->response("Lokasi"));
+        } catch (\Exception $e) {
+            logger($e->getMessage());
+
+            return redirect(route("facilities.import"))->with("error", $this->responseMessage->response("lokasi", false));
         }
     }
 
