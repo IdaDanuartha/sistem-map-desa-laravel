@@ -77,7 +77,7 @@ class FacilityController extends Controller
         } catch (\Exception $e) {
             logger($e->getMessage());
 
-            return redirect(route("facilities.import"))->with("error", $this->responseMessage->response("lokasi", false));
+            return redirect(route("facilities.import"))->with("error", "Gagal menambahkan lokasi! Cek kembali format file (.csv)");
         }
     }
 

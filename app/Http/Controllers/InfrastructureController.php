@@ -77,7 +77,7 @@ class InfrastructureController extends Controller
         } catch (\Exception $e) {
             logger($e->getMessage());
 
-            return redirect(route("infrastructures.import"))->with("error", $this->responseMessage->response("lokasi", false));
+            return redirect(route("infrastructures.import"))->with("error", "Gagal menambahkan lokasi! Cek kembali format file (.csv)");
         }
     }
 
