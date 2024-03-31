@@ -21,10 +21,10 @@ class InfrastructureImport implements ToModel
             "user_id" => auth()->id(), 
             "name" => $row[0],
             "description" => $row[1],
-            // "latitude" => explode('"', $row[2])[1],
-            // "longitude" => explode('"', $row[3])[1],
-            "latitude" => substr_replace(strval($row[2]), ".", 2, 0),
-            "longitude" => substr_replace(strval($row[3]), ".", 3, 0),
+            "latitude" => $row[2],
+            "longitude" => $row[3],
+            // "latitude" => substr_replace(strval($row[2]), ".", 2, 0),
+            // "longitude" => substr_replace(strval($row[3]), ".", 3, 0),
         ]);
     }
 }
