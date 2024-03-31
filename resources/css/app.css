@@ -20,6 +20,10 @@
 		z-index: 1;
 	}
 
+	.loader-animation.active {
+		@apply !flex;
+	}
+
 	.form-label.required::after {
 		content: '*';
 		@apply text-red-500 text-xl relative top-1 left-0.5;
