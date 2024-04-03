@@ -46,18 +46,18 @@
     <script>
         let villages = JSON.parse('<?= json_encode($villages) ?>')
 
-        $( function() {
-            let villageData = []
-            villages.forEach(village => {
-                villageData.push(village.name)
-            })
-            $( "#search-box" ).autocomplete({
-                source: function(request, response) {
-                    var results = $.ui.autocomplete.filter(villageData, request.term);
-                    response(results.slice(0, 15));
-                }
-            });
-        } );
+            $( function() {
+                let villageData = []
+                villages.forEach(village => {
+                    villageData.push(village.name)
+                })
+                $( "#search-box" ).autocomplete({
+                    source: function(request, response) {
+                        var results = $.ui.autocomplete.filter(villageData, request.term);
+                        response(results.slice(0, 15));
+                    }
+                });
+            } );
 
         // initialize the map on the "map" div with a given center and zoom
         let map = L.map('map')
@@ -71,12 +71,12 @@
                         map.setView([parseFloat(findLocation.latitude), parseFloat(findLocation.longitude)], 50);
                     }
                 } else {
-                    map.setView([-8.659488860100769, 115.16421012486913], 15);
+                    map.setView([-8.435411449023388, 115.24468779642072], 15);
                 }
             }, 1000);
             $(".loader-animation").toggleClass("active")
         })
-        map.setView([-8.659488860100769, 115.16421012486913], 15);
+        map.setView([-8.435411449023388, 115.24468779642072], 15);
 
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {

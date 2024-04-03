@@ -86,12 +86,12 @@
                     map.setView([parseFloat(findLocation.latitude), parseFloat(findLocation.longitude)],
                         50);
                 } else {
-                    map.setView([-8.659488860100769, 115.16421012486913], 15);
+                    map.setView([-8.435411449023388, 115.24468779642072], 15);
                 }
             }, 1000);
             $(".loader-animation").toggleClass("active")
         })
-        map.setView([-8.659488860100769, 115.16421012486913], 15);
+        map.setView([-8.435411449023388, 115.24468779642072], 15);
 
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
