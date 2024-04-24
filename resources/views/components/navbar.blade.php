@@ -50,6 +50,13 @@
                             <div class="dropdown-divider"></div>
                         </li>
                         <li>
+                            <a href="{{ route('profile.index') }}" class="dropdown-item">
+                                <i class="bx bx-user me-2"></i>
+                                {{-- <span class="align-middle">Log Out</span> --}}
+                                <span>Profile</span>
+                            </a>
+                        </li>
+                        <li>
                             <form class="dropdown-item" href="javascript:void(0);" action="{{ route('logout') }}"
                                 method="POST">
                                 @csrf

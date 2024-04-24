@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\InfrastructureController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VillageController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,10 @@ Route::middleware("auth")->group(function() {
     Route::resource("/facilities", FacilityController::class)->except("index", "show");
     Route::get("/facility/import", [FacilityController::class, 'importView'])->name('facilities.importView');
     Route::post("/facility/import", [FacilityController::class, 'import'])->name('facilities.import');
+
+    Route::get("/profile", [ProfileController::class, 'index'])->name('profile.index');
+    Route::get("/profile/edit", [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put("/profile/update", [ProfileController::class, 'update'])->name('profile.update');
 });
 
 Route::get("/", DashboardController::class)->name('dashboard');
