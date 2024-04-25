@@ -18,10 +18,11 @@ class DashboardController extends Controller
 
     public function __invoke(Request $request)
     {
+        $villages = $this->village->findAll();
         $total_villages = count($this->village->findAll());
         $total_infrastructures = count($this->infrastructure->findAll());
         $total_facilities = count($this->facility->findAll());
 
-        return view('pages.dashboard.index', compact("total_villages", "total_infrastructures", "total_facilities"));
+        return view('pages.dashboard.index', compact("villages", "total_villages", "total_infrastructures", "total_facilities"));
     }
 }
