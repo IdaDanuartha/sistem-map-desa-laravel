@@ -121,7 +121,10 @@
                     <!-- / Content -->
 
 
-
+                    <footer class="text-center">
+                        <p>© Copyright sistem pemetaan penduduk desa melinggih. All Right Reserved</p>
+                        <p class="-mt-4">Designed by <a target="_blank" href="https://primakara.ac.id/">Primakara University</a></p>
+                    </footer>
                     <div class="content-backdrop fade"></div>
                 </div>
                 <!-- Content wrapper -->
